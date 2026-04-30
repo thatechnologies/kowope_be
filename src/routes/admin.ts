@@ -2,6 +2,7 @@ import { Router } from "express";
 import { z } from "zod";
 import { pool } from "../db/pool";
 import { requireAuth } from "../auth/middleware";
+import { createNotification } from "../lib/notifications";
 
 export const adminRouter = Router();
 
@@ -56,7 +57,10 @@ adminRouter.patch("/contributions/:id", requireAuth, async (req, res) => {
   const parsed = reviewSchema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: "invalid_input", details: parsed.error.flatten() });
 
-  const { rows: foundRows } = await pool.query<{ group_id: string }>("SELECT group_id FROM contributions WHERE id = $1", [id]);
+  const { rows: foundRows } = await pool.query<{ group_id: string; member_id: string; amount: string; cycle_number: number }>(
+    "SELECT group_id, member_id, amount::text, cycle_number FROM contributions WHERE id = $1",
+    [id],
+  );
   const found = foundRows[0];
   if (!found) return res.status(404).json({ error: "not_found" });
   if (!(await isGroupAdmin(found.group_id, reviewerId))) return res.status(403).json({ error: "forbidden" });
@@ -65,6 +69,21 @@ adminRouter.patch("/contributions/:id", requireAuth, async (req, res) => {
     "UPDATE contributions SET status = $1, reviewed_at = now(), reviewed_by = $2 WHERE id = $3",
     [parsed.data.status, reviewerId, id],
   );
+
+  const { rows: gRows } = await pool.query<{ name: string }>("SELECT name FROM groups WHERE id = $1", [found.group_id]);
+  const groupName = gRows[0]?.name ?? "your group";
+  await createNotification({
+    userId: found.member_id,
+    type: parsed.data.status === "confirmed" ? "contribution_confirmed" : "contribution_rejected",
+    title: parsed.data.status === "confirmed" ? "Payment confirmed" : "Payment rejected",
+    message:
+      parsed.data.status === "confirmed"
+        ? `Your payment was confirmed in ${groupName}.`
+        : `Your payment was rejected in ${groupName}.`,
+    groupId: found.group_id,
+    actorId: reviewerId,
+    metadata: { groupId: found.group_id, contributionId: id, cycle: found.cycle_number, amount: Number(found.amount) },
+  });
+
   return res.json({ ok: true });
 });
-

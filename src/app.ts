@@ -6,6 +6,7 @@ import { env } from "./env";
 import { authRouter } from "./routes/auth";
 import { groupsRouter } from "./routes/groups";
 import { adminRouter } from "./routes/admin";
+import { notificationsRouter } from "./routes/notifications";
 
 export const app = express();
 
@@ -19,5 +20,6 @@ app.get("/health", (_req, res) => res.json({ ok: true }));
 app.use("/auth", authRouter);
 app.use("/groups", groupsRouter);
 app.use("/admin", adminRouter);
+app.use("/notifications", notificationsRouter);
 
 app.use((_req, res) => res.status(404).json({ error: "not_found" }));

@@ -65,6 +65,7 @@ CREATE TABLE IF NOT EXISTS contributions (
 
 CREATE INDEX IF NOT EXISTS idx_contributions_group_status ON contributions (group_id, status);
 CREATE INDEX IF NOT EXISTS idx_contributions_member ON contributions (member_id);
+CREATE UNIQUE INDEX IF NOT EXISTS uq_contrib_member_cycle ON contributions (group_id, member_id, cycle_number);
 
 CREATE TABLE IF NOT EXISTS payouts (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
