@@ -88,6 +88,13 @@ groupsRouter.get("/", requireAuth, async (req, res) => {
             AND c.status IN ('pending', 'confirmed')
         ) AS i_paid_this_cycle,
         (
+          SELECT gm2.user_id
+          FROM group_members gm2
+          WHERE gm2.group_id = g.id
+            AND gm2.payout_position = ((g.current_cycle - 1) % g.total_members) + 1
+          LIMIT 1
+        ) AS next_payout_member_id,
+        (
           SELECT u2.full_name
           FROM group_members gm2
           JOIN users u2 ON u2.id = gm2.user_id
@@ -157,6 +164,13 @@ groupsRouter.get("/:groupId", requireAuth, async (req, res) => {
             AND c.member_id = gm.user_id
             AND c.status IN ('pending', 'confirmed')
         ) AS i_paid_this_cycle,
+        (
+          SELECT gm2.user_id
+          FROM group_members gm2
+          WHERE gm2.group_id = g.id
+            AND gm2.payout_position = ((g.current_cycle - 1) % g.total_members) + 1
+          LIMIT 1
+        ) AS next_payout_member_id,
         (
           SELECT u2.full_name
           FROM group_members gm2
