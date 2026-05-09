@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
-import { env } from "./env";
 import { authRouter } from "./routes/auth";
 import { groupsRouter } from "./routes/groups";
 import { adminRouter } from "./routes/admin";
