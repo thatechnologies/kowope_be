@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { z } from "zod";
-import { pool } from "../db/pool";
-import { requireAuth } from "../auth/middleware";
+import { pool } from "../db/pool.js";
+import { requireAuth } from "../auth/middleware.js";
 
 export const notificationsRouter = Router();
 

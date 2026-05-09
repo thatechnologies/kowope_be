@@ -2,10 +2,10 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
-import { authRouter } from "./routes/auth";
-import { groupsRouter } from "./routes/groups";
-import { adminRouter } from "./routes/admin";
-import { notificationsRouter } from "./routes/notifications";
+import { authRouter } from "./routes/auth.js";
+import { groupsRouter } from "./routes/groups.js";
+import { adminRouter } from "./routes/admin.js";
+import { notificationsRouter } from "./routes/notifications.js";
 
 export const app = express();
 
@@ -18,8 +18,6 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
-
-
 app.options(/.*/, cors());
 app.use(express.json({ limit: "10mb" }));
 app.use(morgan("dev"));

@@ -1,5 +1,5 @@
-import { app } from "./app.ts";
-import { env } from "./env";
+import { app } from "./app.js";
+import { env } from "./env.js";
 
 app.listen(env.PORT, () => {
   console.log(`kowope_be listening on http://localhost:${env.PORT}`);

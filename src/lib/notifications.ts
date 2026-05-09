@@ -1,4 +1,4 @@
-import { pool } from "../db/pool";
+import { pool } from "../db/pool.js";
 
 export type NotificationType =
   | "join_request_created"

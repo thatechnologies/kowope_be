@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
-import { pool } from "../db/pool";
-import { signAccessToken } from "../auth/jwt";
-import { requireAuth } from "../auth/middleware";
+import { pool } from "../db/pool.js";
+import { signAccessToken } from "../auth/jwt.js";
+import { requireAuth } from "../auth/middleware.js";
 import crypto from "node:crypto";
 
 export const authRouter = Router();

@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { z } from "zod";
-import { pool } from "../db/pool";
-import { requireAuth } from "../auth/middleware";
-import { createNotification, notifyGroupAdmins, notifyGroupMembers } from "../lib/notifications";
+import { pool } from "../db/pool.js";
+import { requireAuth } from "../auth/middleware.js";
+import { createNotification, notifyGroupAdmins, notifyGroupMembers } from "../lib/notifications.js";
 
 export const groupsRouter = Router();
 
