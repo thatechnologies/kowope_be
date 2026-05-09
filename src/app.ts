@@ -11,7 +11,7 @@ import { notificationsRouter } from "./routes/notifications";
 export const app = express();
 
 app.use(helmet());
-app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
+app.use(cors({ origin: "https://kowope.vercel.app", credentials: true }));
 app.use(express.json({ limit: "10mb" }));
 app.use(morgan("dev"));
 
